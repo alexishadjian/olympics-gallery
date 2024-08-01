@@ -10,7 +10,7 @@ import { Inter } from "next/font/google";
 const inter = Inter({ subsets: ["latin"] });
 
 //Style
-// import "./_styles/global.scss";
+import "./_styles/global.scss";
 
 
 export default function RootLayout({children}: Readonly<{children: React.ReactNode;}>) {
