@@ -1,5 +1,6 @@
 import { SRGBColorSpace, TextureLoader } from "three";
 import Experience from "../Experience";
+import images from "../source";
 
 export default class Loader {
     
@@ -12,7 +13,7 @@ export default class Loader {
 
     constructor() {
         this.experience = new Experience();
-        this.sources = []; // Put files source here
+        this.sources = images;
         
         this.items = {};
         this.toLoad = this.sources.length;

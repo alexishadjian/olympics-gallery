@@ -1,38 +1,41 @@
-import { Mesh, MeshBasicMaterial, BoxGeometry } from "three";
+import { Mesh, MeshBasicMaterial, PlaneGeometry } from "three";
 import Experience from "../Experience";
 
-export default class Cube {
-    
+export default class Image {
+
     experience: Experience;
-    geometry!: BoxGeometry;
+    geometry!: PlaneGeometry;
     material!: MeshBasicMaterial;
     mesh!: Mesh;
     width: number;
     height: number;
-    depth: number;
-    time: any
+    texture: string;
+    time: any;
+    loader: any;
 
-    constructor(width: number, height: number, depth: number) {
+    constructor(width: number, height: number, texture: string) {
 
         this.experience = new Experience;
         this.time = this.experience.time;
-
+        this.loader = this.experience.loader;
 
         this.width = width;
         this.height = height;
-        this.depth = depth;
-        
+        this.texture = texture;
+
         this.setGeometry();
         this.setMaterial();
         this.setMesh();
     }
-    
+
     setGeometry() {
-        this.geometry = new BoxGeometry(this.width, this.height, this.depth);
+        this.geometry = new PlaneGeometry(this.width, this.height, 64, 64);
     }
 
     setMaterial() {
-        this.material = new MeshBasicMaterial({ color: 0x006de1 });
+        this.material = new MeshBasicMaterial({
+            map: this.loader.items[this.texture],
+        });
     }
 
     setMesh() {

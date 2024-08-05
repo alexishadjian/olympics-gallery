@@ -31,7 +31,7 @@ export default function Home() {
                     height: '100%',
                     outline: 'none',
                     inset: 0,
-                    zIndex: -1
+                    // zIndex: -1
                 }}
             >
             </canvas>

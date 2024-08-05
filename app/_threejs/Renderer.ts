@@ -17,7 +17,8 @@ export default class Renderer {
     setInstance() {
         this.instance = new WebGLRenderer({
             canvas: this.experience.canvas,
-            antialias: true
+            antialias: true,
+            alpha: true,
         });
 
         this.instance.setSize(this.experience.width, this.experience.height);
