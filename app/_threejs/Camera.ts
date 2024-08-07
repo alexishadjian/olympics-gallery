@@ -29,7 +29,7 @@
 
             this.setInstance();
             this.setCameraTarget();
-            this.setOrbitControls();
+            // this.setOrbitControls();
 
             if(this.debug.active) {
                 // Debug group
@@ -89,7 +89,7 @@
         }
 
         update() {
-            this.controls.update();
+            // this.controls.update();
             
             this.instance.lookAt(this.cameraTarget.position);
         }

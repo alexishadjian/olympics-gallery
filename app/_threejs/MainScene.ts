@@ -58,6 +58,6 @@ export default class MainScene extends Scene {
     }
 
     update() {
-        // this.cube.update();
+        this.gallery.update();
     }
 }
