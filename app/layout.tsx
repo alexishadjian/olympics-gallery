@@ -1,7 +1,7 @@
 //METADATA
 import type { Metadata } from "next";
 export const metadata: Metadata = {
-    title: "Travel gallery",
+    title: "Olympics gallery",
     description: "3D pictures gallery",
 };
 
@@ -9,14 +9,22 @@ export const metadata: Metadata = {
 import { Inter } from "next/font/google";
 const inter = Inter({ subsets: ["latin"] });
 
-//Style
+//STYLE
 import "./_styles/global.scss";
+
+//HEADER
+import Header from './_components/header/header';
 
 
 export default function RootLayout({children}: Readonly<{children: React.ReactNode;}>) {
     return (
         <html lang="en">
-            <body className={inter.className}>{children}</body>
+            <body className={inter.className}>
+                <Header />
+                <main>
+                    {children}
+                </main>
+            </body>
         </html>
     );
 }

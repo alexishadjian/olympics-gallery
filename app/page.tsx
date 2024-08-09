@@ -15,13 +15,12 @@ export default function Home() {
     })
 
     return (
-        <main className="home">
-            <div className="grid marker">
+        <div className="home">
+            {/* <div className="grid marker">
                 {Array.from({ length: 12 }).map((_, index) => (
                     <div key={index} className="s_1column"></div>
                 ))}
-            </div>
-            <h1>Home</h1>
+            </div> */}
             <canvas 
                 ref={canvasRef} 
                 className="webgl"
@@ -35,6 +34,6 @@ export default function Home() {
                 }}
             >
             </canvas>
-        </main>
+        </div>
     );
 }
