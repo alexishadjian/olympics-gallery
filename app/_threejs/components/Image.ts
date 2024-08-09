@@ -1,4 +1,4 @@
-import { Mesh, MeshBasicMaterial, BufferGeometry, Float32BufferAttribute, PlaneGeometry } from "three";
+import { Mesh, MeshBasicMaterial, BufferGeometry, PlaneGeometry } from "three";
 import Experience from "../Experience";
 
 export default class Image {

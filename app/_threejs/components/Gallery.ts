@@ -27,20 +27,8 @@ export default class Gallery extends Object3D {
         this.time = this.experience.time;
         this.loader = this.experience.loader;
 
-        this.images = [
-            { name: 'bmx'},
-            { name: 'bmx2'},
-            { name: 'bmx3'},
-            { name: 'running'},
-            { name: 'surf'},
-            { name: 'surf2'},
-            { name: 'tower'},
-            { name: 'sword'},
-            { name: 'gym'},
-            { name: 'pool'},
-            { name: 'perch'},
-            { name: 'skate'},
-        ];
+        // Get images sources
+        this.images = this.loader.sources;
 
         this.imageObjects = [];  
         this.scroll = 0;
@@ -57,13 +45,12 @@ export default class Gallery extends Object3D {
         this.scrollEvent();
         this.touchEvent();
         this.hoverEvent();
-        
 
     }
     
     setImage() {
         this.images.forEach((img, i) => {
-            const image = new Image(6, 6, img.name);            
+            const image = new Image(7, 5, img.name);            
             image.mesh.position.z = i * 3.5;
             this.add(image.mesh);
             this.imageObjects.push(image);
@@ -136,7 +123,6 @@ export default class Gallery extends Object3D {
         this.imageObjects.forEach((image: Image, i: number) => {
 
             image.update();
-
 
             let imagePositionZ = (i * -3.5 + this.currentScroll) % totalHeight;
     
