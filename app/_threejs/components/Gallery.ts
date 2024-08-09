@@ -1,4 +1,4 @@
-import { Mesh, MeshBasicMaterial, Object3D, PlaneGeometry } from "three";
+import { Mesh, MeshBasicMaterial, Object3D, PlaneGeometry, Raycaster, Vector2 } from "three";
 import Experience from "../Experience";
 import Image from "./Image";
 
@@ -13,6 +13,10 @@ export default class Gallery extends Object3D {
     currentScroll: number;
     imageObjects: any;
     touchStartY: number | null;
+    raycaster: Raycaster;
+    mouse: Vector2;
+    hoveredImages: Set<Image>;
+
 
 
     constructor() {
@@ -24,18 +28,18 @@ export default class Gallery extends Object3D {
         this.loader = this.experience.loader;
 
         this.images = [
-            { name: 'beach'},
-            { name: 'jungle'},
-            { name: 'beach'},
-            { name: 'jungle'},
-            { name: 'beach'},
-            { name: 'jungle'},
-            { name: 'beach'},
-            { name: 'jungle'},
-            { name: 'beach'},
-            { name: 'jungle'},
-            { name: 'beach'},
-            { name: 'jungle'},
+            { name: 'bmx'},
+            { name: 'bmx2'},
+            { name: 'bmx3'},
+            { name: 'running'},
+            { name: 'surf'},
+            { name: 'surf2'},
+            { name: 'tower'},
+            { name: 'sword'},
+            { name: 'gym'},
+            { name: 'pool'},
+            { name: 'perch'},
+            { name: 'skate'},
         ];
 
         this.imageObjects = [];  
@@ -44,10 +48,16 @@ export default class Gallery extends Object3D {
         this.currentScroll = 0;
         this.touchStartY = null;
 
-        
+        this.raycaster = new Raycaster();
+        this.mouse = new Vector2();
+        this.hoveredImages = new Set();
+
+
         this.setImage();
         this.scrollEvent();
         this.touchEvent();
+        this.hoverEvent();
+        
 
     }
     
@@ -104,12 +114,46 @@ export default class Gallery extends Object3D {
         this.touchStartY = null;
     }
 
+    /***** Hover handle *****/
+
+    hoverEvent() {
+        window.addEventListener('mousemove', this.onMouseMove.bind(this));
+    }
+
+    onMouseMove(event: MouseEvent) {
+        this.mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+        this.mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+    }
+
     update() {
-
         this.updateScrollValues();
-
+    
+        const waveWidth = 5; // Wave area width
+        const waveAmplitude = 5; // Wave height
+        const totalHeight = this.images.length * 3.5;
+    
         this.imageObjects.forEach((image: Image, i: number) => {
-            image.mesh.position.z = (i * -3.5 + this.currentScroll) % (this.images.length * -3.5);
+
+            let imagePositionZ = (i * -3.5 + this.currentScroll) % totalHeight;
+    
+            // Infinite effect : move image when out of screen to comeback
+            if (imagePositionZ < -totalHeight / 2) {
+                imagePositionZ += totalHeight;
+            } else if (imagePositionZ > totalHeight / 2) {
+                imagePositionZ -= totalHeight;
+            }
+    
+            image.mesh.position.z = imagePositionZ;
+    
+            // Apply wave effect only on image near center 
+            image.targetY = waveAmplitude * Math.exp(-Math.pow(imagePositionZ / waveWidth, 2));
+    
+            // Smooth transition
+            image.currentY += (image.targetY - image.currentY) * 0.1;
+            image.mesh.position.y = image.currentY;
         });
     }
+    
+    
+    
 }

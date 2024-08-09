@@ -64,7 +64,7 @@
 
         setCameraTarget() {
             this.cameraTarget = new Mesh(
-                new SphereGeometry(2, 4, 4),
+                new SphereGeometry(0, 4, 4),
                 new MeshBasicMaterial({ color: 'blue', wireframe: true })
             );
             this.cameraTarget.position.set(0, 0, 0);

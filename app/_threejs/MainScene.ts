@@ -48,7 +48,7 @@ export default class MainScene extends Scene {
         this.add(this.axesHelper);
 
         this.gallery = new Gallery();
-        this.gallery.position.z = -20;
+        // this.gallery.position.z = -20;
         this.add(this.gallery);
     }
 

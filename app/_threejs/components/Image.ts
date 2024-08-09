@@ -12,6 +12,8 @@ export default class Image {
     texture: string;
     time: any;
     loader: any;
+    targetY: number = 0;
+    currentY: number = 0;
 
     constructor(width: number, height: number, texture: string) {
 
