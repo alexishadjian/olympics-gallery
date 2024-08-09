@@ -128,11 +128,15 @@ export default class Gallery extends Object3D {
     update() {
         this.updateScrollValues();
     
+        // const waveFrequency = 0.2; // Frequency
         const waveWidth = 5; // Wave area width
         const waveAmplitude = 5; // Wave height
         const totalHeight = this.images.length * 3.5;
     
         this.imageObjects.forEach((image: Image, i: number) => {
+
+            image.update();
+
 
             let imagePositionZ = (i * -3.5 + this.currentScroll) % totalHeight;
     
@@ -147,13 +151,13 @@ export default class Gallery extends Object3D {
     
             // Apply wave effect only on image near center 
             image.targetY = waveAmplitude * Math.exp(-Math.pow(imagePositionZ / waveWidth, 2));
-    
+            // image.targetY = waveAmplitude * Math.sin(imagePositionZ * waveFrequency);
+
+
             // Smooth transition
             image.currentY += (image.targetY - image.currentY) * 0.1;
             image.mesh.position.y = image.currentY;
         });
     }
-    
-    
     
 }

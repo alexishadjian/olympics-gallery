@@ -1,10 +1,10 @@
-import { Mesh, MeshBasicMaterial, PlaneGeometry } from "three";
+import { Mesh, MeshBasicMaterial, BufferGeometry, Float32BufferAttribute, PlaneGeometry } from "three";
 import Experience from "../Experience";
 
 export default class Image {
 
     experience: Experience;
-    geometry!: PlaneGeometry;
+    geometry!: BufferGeometry;
     material!: MeshBasicMaterial;
     mesh!: Mesh;
     width: number;
@@ -14,6 +14,8 @@ export default class Image {
     loader: any;
     targetY: number = 0;
     currentY: number = 0;
+    initialPositions!: Float32Array;
+
 
     constructor(width: number, height: number, texture: string) {
 
@@ -31,7 +33,15 @@ export default class Image {
     }
 
     setGeometry() {
-        this.geometry = new PlaneGeometry(this.width, this.height, 64, 64);
+        const planeGeometry = new PlaneGeometry(this.width, this.height, 64, 64);
+        this.geometry = planeGeometry as BufferGeometry;
+
+        // Initial position
+        const positionAttribute = this.geometry.attributes.position;
+        const positions = positionAttribute.array as Float32Array;
+        this.initialPositions = new Float32Array(positions.length);
+        this.initialPositions.set(positions);
+
     }
 
     setMaterial() {
@@ -46,7 +56,21 @@ export default class Image {
     }
 
     update() {
-        this.mesh.rotation.y = 0.5 * this.time.elapsedTime
-        this.mesh.rotation.x = 0.5 * this.time.elapsedTime
+        this.applyWaveEffect();
+    }
+
+    applyWaveEffect() {
+        const waveFrequency = 2; // Frequency
+        const waveAmplitude = 0.05; // Amplitude
+
+        const positionAttribute = this.geometry.attributes.position;
+        const positions = positionAttribute.array as Float32Array;
+
+        for (let i = 0; i < positions.length; i += 3) {
+            const y = this.initialPositions[i + 1]; // Initial Y position
+            positions[i + 2] = waveAmplitude * Math.sin(y * waveFrequency + this.time.elapsedTime); // Edit Z position
+        }
+
+        positionAttribute.needsUpdate = true;
     }
 }
