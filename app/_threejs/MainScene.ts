@@ -23,10 +23,9 @@ export default class MainScene extends Scene {
         this.debug = this.experience.debug;
 
 
-        this.buildScene();
         this.setLights(); 
         
-        if (this.debug.active) {
+        if (this.debug?.active) {
             // Debug group
             this.debugFolder = this.debug.ui.addFolder('Gallery');
 
@@ -58,6 +57,6 @@ export default class MainScene extends Scene {
     }
 
     update() {
-        this.gallery.update();
+        this.gallery?.update();
     }
 }

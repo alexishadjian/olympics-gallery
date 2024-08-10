@@ -7,6 +7,4 @@ const imageList = images.keys().map((path: string, i: number) => {
     }
 })
 
-console.log('im', imageList);
-
 export default imageList;

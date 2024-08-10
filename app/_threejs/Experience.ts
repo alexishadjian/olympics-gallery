@@ -28,6 +28,7 @@ export default class Experience {
         instance = this;
 
         this.canvas = canvas;
+        this.scene = new MainScene();
 
         // Set scene sizes
         this.width = innerWidth;
@@ -43,7 +44,7 @@ export default class Experience {
     }
 
     onResourcesLoaded() {
-        this.scene = new MainScene();
+        this.scene.buildScene();
         this.camera = new Camera();
         this.renderer = new Renderer();      
     }
@@ -60,6 +61,7 @@ export default class Experience {
         this.camera?.update();
         this.renderer?.update();
         this.scene?.update();
+        this.loader?.update();
     }
 
     destroyScene() {
