@@ -2,6 +2,11 @@
 
 import { useEffect, useRef } from "react";
 import Experience from "./_threejs/Experience";
+import { OlympicsLogoAnimated } from '@/public/index.js';
+import Image from "next/image";
+import './page.scss';
+
+
 
 
 export default function Home() {
@@ -10,7 +15,7 @@ export default function Home() {
 
     useEffect(() => {
         if (canvasRef.current) {
-            const experience = new Experience(canvasRef.current)
+            new Experience(canvasRef.current)
         }
     })
 
@@ -21,19 +26,22 @@ export default function Home() {
                     <div key={index} className="s_1column"></div>
                 ))}
             </div> */}
-            <canvas 
-                ref={canvasRef} 
-                className="webgl"
-                style={{
-                    position: 'fixed',
-                    width: '100%',
-                    height: '100%',
-                    outline: 'none',
-                    inset: 0,
-                    // zIndex: -1
-                }}
-            >
-            </canvas>
+
+            <div className="overlay flex center">
+                <div className="container flex center column">
+                    <Image 
+                        src={OlympicsLogoAnimated}
+                        alt="Olympcis logo"
+                        style={{ width: '100%', height: 'auto', padding: '14% 30%' }}
+                    />
+                    <div className="loading-bar">
+                        <div className="indicator"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <canvas ref={canvasRef} className="webgl"></canvas>
+
         </div>
     );
 }

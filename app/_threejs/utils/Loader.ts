@@ -12,18 +12,12 @@ export default class Loader {
     experience: Experience;
     loadingManager!: LoadingManager;
     scene: Scene;
-    overlay!: Mesh;
-    overlayGeometry!: PlaneGeometry;
-    overlayMaterial!: ShaderMaterial;
-    uAlphaTarget: number;
-    uAlphaCurrent: number;
+    overlay: HTMLElement;
+    loadBar: HTMLElement;
 
     constructor() {
         this.experience = new Experience();
         this.scene = this.experience.scene;
-
-        // Put overlay to hide scene while loading
-        this.setOverlay();
 
         this.sources = images;
         
@@ -31,8 +25,9 @@ export default class Loader {
         this.toLoad = this.sources.length;
         this.loaded = 0;
 
-        this.uAlphaTarget = 1.0;
-        this.uAlphaCurrent = 1.0;
+        this.overlay = document.querySelector('.overlay') as HTMLElement;
+        this.loadBar = this.overlay.querySelector('.loading-bar .indicator') as HTMLElement;
+
 
         if (this.sources.length > 0) {
             this.setLoaders();
@@ -42,42 +37,18 @@ export default class Loader {
         }
     }
 
-    setOverlay() {
-        this.overlayGeometry = new PlaneGeometry(2, 2, 1, 1);
-        this.overlayMaterial = new ShaderMaterial({
-            // wireframe: false,
-            transparent: true,
-            depthTest: false,
-            uniforms: {
-                uAlpha: { value: this.uAlphaCurrent }
-            },
-            vertexShader: `
-                void main() {
-                    gl_Position = vec4(position, 1.0);
-                }
-            `,
-            fragmentShader: `
-                uniform float uAlpha;
-                void main() {
-                    gl_FragColor = vec4(0.0, 0.0, 0.0, uAlpha);
-                }
-            `
-        });
-        this.overlay = new Mesh(this.overlayGeometry, this.overlayMaterial);
-        // Put on top of scene
-        this.overlay.renderOrder = 999;
-
-        this.scene.add(this.overlay);
-    }
-
     setLoaders() {
         this.loadingManager = new LoadingManager(
             () => {
-                console.log('Loaded');
-                this.uAlphaTarget = 0;
+                //Loaded
+                setTimeout(() => {    
+                    this.overlay.style.opacity = '0';
+                }, 2500);
             },
-            () => {
-                console.log('Progress');
+            (itemUrl, itemLoaded, itemTotal) => {
+                //Progress
+                const ratio = itemLoaded / itemTotal;
+                this.loadBar.style.transform = `scaleX(${ratio})`
             }
         );
         this.textureLoader = new TextureLoader(this.loadingManager);
@@ -106,16 +77,4 @@ export default class Loader {
         }
     }
 
-    update() {
-        // Interpolate the uAlpha value towards the target
-        this.uAlphaCurrent += (this.uAlphaTarget - this.uAlphaCurrent) * 0.15;
-
-        // Update the shader uniform with the new alpha value
-        this.overlayMaterial.uniforms.uAlpha.value = this.uAlphaCurrent;
-
-        // Optionally, remove the overlay from the scene once it's fully faded out
-        if (this.uAlphaCurrent < 0.01 && this.overlayMaterial.uniforms.uAlpha.value === 0) {
-            this.scene.remove(this.overlay);
-        }
-    }
 }
