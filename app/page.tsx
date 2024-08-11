@@ -38,7 +38,7 @@ export default function Home() {
             <canvas ref={canvasRef} className="webgl"></canvas>
 
             <div className="overlay flex center">
-                <div className="container flex center column">
+                <div className="content flex center column">
                     <Image 
                         src={OlympicsLogoAnimated}
                         alt="Olympcis logo"

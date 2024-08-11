@@ -14,6 +14,7 @@ export default class Loader {
     scene: Scene;
     overlay: HTMLElement;
     loadBar: HTMLElement;
+    overlayContent: HTMLElement;
 
     constructor() {
         this.experience = new Experience();
@@ -26,6 +27,7 @@ export default class Loader {
         this.loaded = 0;
 
         this.overlay = document.querySelector('.overlay') as HTMLElement;
+        this.overlayContent = this.overlay.querySelector('.content') as HTMLElement;
         this.loadBar = this.overlay.querySelector('.loading-bar .indicator') as HTMLElement;
 
 
@@ -42,7 +44,9 @@ export default class Loader {
             () => {
                 //Loaded
                 setTimeout(() => {    
+                    this.overlayContent.style.opacity = '0';
                     this.overlay.style.opacity = '0';
+                    this.overlay.style.visibility = 'hidden';
                     this.experience.scene.gallery.autoScroll = false;
                 }, 3000);
             },

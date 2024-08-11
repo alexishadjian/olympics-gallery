@@ -55,10 +55,10 @@
                 this.distance,
                 -this.distance,
                 1,
-                1000
+                100
             );
     
-            this.instance.position.set(12, 14, 20);
+            this.instance.position.set(12, 14, 22);
             this.scene.add(this.instance);
         }
 
