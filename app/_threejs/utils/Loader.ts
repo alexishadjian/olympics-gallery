@@ -43,7 +43,7 @@ export default class Loader {
                 //Loaded
                 setTimeout(() => {    
                     this.overlay.style.opacity = '0';
-                }, 2500);
+                }, 3000);
             },
             (itemUrl, itemLoaded, itemTotal) => {
                 //Progress
@@ -68,6 +68,7 @@ export default class Loader {
 
     sourceLoaded(source: any, file: any) {
         file.colorSpace = SRGBColorSpace;
+        // file.generateMipmaps = false;
         this.items[source.name] = file;
 
         this.loaded++;

@@ -28,7 +28,7 @@ export default class Gallery extends Object3D {
         this.loader = this.experience.loader;
 
         // Get images sources
-        this.images = this.loader.sources;
+        this.images = this.loader?.sources;
 
         this.imageObjects = [];  
         this.scroll = 0;
@@ -49,7 +49,7 @@ export default class Gallery extends Object3D {
     }
     
     setImage() {
-        this.images.forEach((img, i) => {
+        this.images?.forEach((img, i) => {
             const image = new Image(7, 5, img.name);            
             image.mesh.position.z = i * 3.5;
             this.add(image.mesh);
@@ -118,7 +118,7 @@ export default class Gallery extends Object3D {
         // const waveFrequency = 0.2; // Frequency
         const waveWidth = 5; // Wave area width
         const waveAmplitude = 5; // Wave height
-        const totalHeight = this.images.length * 3.5;
+        const totalHeight = this.images?.length * 3.5;
     
         this.imageObjects.forEach((image: Image, i: number) => {
 

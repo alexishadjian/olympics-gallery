@@ -23,7 +23,7 @@ export default class MainScene extends Scene {
         this.debug = this.experience.debug;
 
 
-        this.setLights(); 
+        // this.setLights(); 
         
         if (this.debug?.active) {
             // Debug group
@@ -42,9 +42,9 @@ export default class MainScene extends Scene {
 
 
     buildScene() {
-        this.axesHelper = new AxesHelper(5);
-        this.axesHelper.position.y = 0.5;
-        this.add(this.axesHelper);
+        // this.axesHelper = new AxesHelper(5);
+        // this.axesHelper.position.y = 0.5;
+        // this.add(this.axesHelper);
 
         this.gallery = new Gallery();
         // this.gallery.position.z = -20;
