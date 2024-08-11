@@ -7,16 +7,16 @@ export default class Gallery extends Object3D {
     experience: Experience;
     time: any;
     loader: any;
-    images!: { name: string }[];
-    scroll: number;
-    scrollTarget: number;
-    currentScroll: number;
-    imageObjects: any;
-    touchStartY: number | null;
-    raycaster: Raycaster;
-    mouse: Vector2;
-    hoveredImages: Set<Image>;
-
+    images: { name: string }[] = [];
+    scroll: number = 0;
+    scrollTarget: number = 0;
+    currentScroll: number = 0;
+    imageObjects: any = [];
+    touchStartY: number | null = null;
+    autoScroll: boolean = true;
+    // raycaster: Raycaster;
+    // mouse: Vector2;
+    // hoveredImages: Set<Image>;
 
 
     constructor() {
@@ -30,21 +30,16 @@ export default class Gallery extends Object3D {
         // Get images sources
         this.images = this.loader?.sources;
 
-        this.imageObjects = [];  
-        this.scroll = 0;
-        this.scrollTarget = 0;
-        this.currentScroll = 0;
-        this.touchStartY = null;
 
-        this.raycaster = new Raycaster();
-        this.mouse = new Vector2();
-        this.hoveredImages = new Set();
+        // this.raycaster = new Raycaster();
+        // this.mouse = new Vector2();
+        // this.hoveredImages = new Set();
 
 
         this.setImage();
         this.scrollEvent();
         this.touchEvent();
-        this.hoverEvent();
+        // this.hoverEvent();
 
     }
     
@@ -103,17 +98,19 @@ export default class Gallery extends Object3D {
 
     /***** Hover handle *****/
 
-    hoverEvent() {
-        window.addEventListener('mousemove', this.onMouseMove.bind(this));
-    }
+    // hoverEvent() {
+    //     window.addEventListener('mousemove', this.onMouseMove.bind(this));
+    // }
 
-    onMouseMove(event: MouseEvent) {
-        this.mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-        this.mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
-    }
+    // onMouseMove(event: MouseEvent) {
+    //     this.mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+    //     this.mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+    // }
 
     update() {
         this.updateScrollValues();
+
+        if (this.autoScroll) this.scrollTarget += 0.05;
     
         // const waveFrequency = 0.2; // Frequency
         const waveWidth = 5; // Wave area width

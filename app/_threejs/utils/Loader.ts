@@ -43,6 +43,7 @@ export default class Loader {
                 //Loaded
                 setTimeout(() => {    
                     this.overlay.style.opacity = '0';
+                    this.experience.scene.gallery.autoScroll = false;
                 }, 3000);
             },
             (itemUrl, itemLoaded, itemTotal) => {
