@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import Experience from "./_threejs/Experience";
-import { OlympicsLogoAnimated } from '@/public/index.js';
+import { OlympicsLogoAnimated, OlympicsBgLogo } from '@/public/index.js';
 import Image from "next/image";
 import './page.scss';
 
@@ -27,6 +27,16 @@ export default function Home() {
                 ))}
             </div> */}
 
+            <div className="bg-logo-container flex center">
+                <Image 
+                    src={OlympicsBgLogo}
+                    alt="Olympcis background logo"
+                    style={{ width: '100%', height: 'auto', padding: '8%' }}
+                />
+            </div>
+
+            <canvas ref={canvasRef} className="webgl"></canvas>
+
             <div className="overlay flex center">
                 <div className="container flex center column">
                     <Image 
@@ -39,8 +49,6 @@ export default function Home() {
                     </div>
                 </div>
             </div>
-            
-            <canvas ref={canvasRef} className="webgl"></canvas>
 
         </div>
     );

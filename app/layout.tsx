@@ -14,6 +14,7 @@ import "./_styles/global.scss";
 
 //HEADER
 import Header from './_components/header/header';
+import Footer from "./_components/footer/footer";
 
 
 export default function RootLayout({children}: Readonly<{children: React.ReactNode;}>) {
@@ -24,6 +25,7 @@ export default function RootLayout({children}: Readonly<{children: React.ReactNo
                 <main>
                     {children}
                 </main>
+                <Footer />
             </body>
         </html>
     );

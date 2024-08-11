@@ -1,0 +1,16 @@
+footer {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 30px;
+
+    .text {
+        font-size: 12px;
+        text-transform: uppercase;
+    }
+
+    .link {
+        position: relative;
+        z-index: 10;
+    }
+}
