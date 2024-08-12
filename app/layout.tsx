@@ -1,8 +1,25 @@
+//FAVICONS
+import { FaviconBlack, FaviconWhite } from '@/images';
+
 //METADATA
 import type { Metadata } from "next";
 export const metadata: Metadata = {
     title: "Olympics gallery",
     description: "3D pictures gallery",
+    icons: [
+        {
+          rel: "icon",
+          type: "image/png",
+          media: "(prefers-color-scheme: light)",
+          url: FaviconBlack.src,
+        },
+        {
+          rel: "icon",
+          type: "image/png",
+          media: "(prefers-color-scheme: dark)",
+          url: FaviconWhite.src,
+        },
+    ],
 };
 
 //FONT
@@ -10,11 +27,11 @@ import { Inter } from "next/font/google";
 const inter = Inter({ subsets: ["latin"] });
 
 //STYLE
-import "./_styles/global.scss";
+import "@/styles/global.scss";
 
 //HEADER
-import Header from './_components/header/header';
-import Footer from "./_components/footer/footer";
+import Header from "@/components/header/header";
+import Footer from "@/components/footer/footer";
 
 
 export default function RootLayout({children}: Readonly<{children: React.ReactNode;}>) {

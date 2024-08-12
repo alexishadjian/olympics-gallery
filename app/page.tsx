@@ -1,12 +1,10 @@
 "use client"
 
 import { useEffect, useRef } from "react";
-import Experience from "./_threejs/Experience";
-import { OlympicsLogoAnimated, OlympicsBgLogo } from '@/public/index.js';
+import Experience from "@/threejs/Experience";
+import { OlympicsLogoAnimated, OlympicsBgLogo } from '@/images';
 import Image from "next/image";
 import './page.scss';
-
-
 
 
 export default function Home() {

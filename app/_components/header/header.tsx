@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { OlympicsLogo, OlympicsLogoAnimated } from '@/public/index.js';
+import { OlympicsLogoAnimated } from '@/images';
 import './header.scss';
 
 export default function Header() {
