@@ -1,4 +1,4 @@
-# travel-gallery
+# Olympics-gallery
 
 ## Launch the project
 ```

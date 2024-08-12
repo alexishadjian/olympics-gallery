@@ -1,5 +1,5 @@
 //FAVICONS
-import { FaviconLight, FaviconDark } from '@/public/index.js';
+import { FaviconBlack, FaviconWhite } from '@/images';
 
 //METADATA
 import type { Metadata } from "next";
@@ -11,15 +11,15 @@ export const metadata: Metadata = {
           rel: "icon",
           type: "image/png",
           media: "(prefers-color-scheme: light)",
-          url: FaviconLight.src,
+          url: FaviconBlack.src,
         },
         {
           rel: "icon",
           type: "image/png",
           media: "(prefers-color-scheme: dark)",
-          url: FaviconDark.src,
+          url: FaviconWhite.src,
         },
-      ],
+    ],
 };
 
 //FONT
@@ -27,11 +27,11 @@ import { Inter } from "next/font/google";
 const inter = Inter({ subsets: ["latin"] });
 
 //STYLE
-import "./_styles/global.scss";
+import "@/styles/global.scss";
 
 //HEADER
-import Header from "./_components/header/header";
-import Footer from "./_components/footer/footer";
+import Header from "@/components/header/header";
+import Footer from "@/components/footer/footer";
 
 
 export default function RootLayout({children}: Readonly<{children: React.ReactNode;}>) {
