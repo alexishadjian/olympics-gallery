@@ -1,8 +1,25 @@
+//FAVICONS
+import { FaviconLight, FaviconDark } from '@/public/index.js';
+
 //METADATA
 import type { Metadata } from "next";
 export const metadata: Metadata = {
     title: "Olympics gallery",
     description: "3D pictures gallery",
+    icons: [
+        {
+          rel: "icon",
+          type: "image/png",
+          media: "(prefers-color-scheme: light)",
+          url: FaviconLight.src,
+        },
+        {
+          rel: "icon",
+          type: "image/png",
+          media: "(prefers-color-scheme: dark)",
+          url: FaviconDark.src,
+        },
+      ],
 };
 
 //FONT
@@ -13,7 +30,7 @@ const inter = Inter({ subsets: ["latin"] });
 import "./_styles/global.scss";
 
 //HEADER
-import Header from './_components/header/header';
+import Header from "./_components/header/header";
 import Footer from "./_components/footer/footer";
 
 
