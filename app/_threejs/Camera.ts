@@ -24,7 +24,7 @@
             this.canvas = this.experience.canvas;
             this.debug = this.experience.debug;
 
-            this.distance = 6;
+            this.distance = 1.7;
 
 
             this.setInstance();
@@ -35,9 +35,9 @@
                 // Debug group
                 this.debugFolder = this.debug.ui.addFolder('Camera');
 
-                this.debugFolder.add(this.instance.position, 'x').min(-100).max(100).step(2).name('Camera x');
-                this.debugFolder.add(this.instance.position, 'y').min(-100).max(100).step(2).name('Camera y');
-                this.debugFolder.add(this.instance.position, 'z').min(-100).max(100).step(2).name('Camera z');
+                this.debugFolder.add(this.instance.position, 'x').min(-100).max(100).step(1).name('Camera x');
+                this.debugFolder.add(this.instance.position, 'y').min(-100).max(100).step(1).name('Camera y');
+                this.debugFolder.add(this.instance.position, 'z').min(-100).max(100).step(1).name('Camera z');
 
                 // Debug property
                 this.debugFolder.add(this.cameraTarget.position, 'x').min(-100).max(100).step(2).name('Target x');

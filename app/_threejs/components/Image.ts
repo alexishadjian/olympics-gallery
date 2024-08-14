@@ -33,7 +33,7 @@ export default class Image {
     }
 
     setGeometry() {
-        const planeGeometry = new PlaneGeometry(this.width, this.height, 64, 64);
+        const planeGeometry = new PlaneGeometry(this.width, this.height, 32, 32);
         this.geometry = planeGeometry as BufferGeometry;
 
         // Initial position
@@ -60,8 +60,8 @@ export default class Image {
     }
 
     applyWaveEffect() {
-        const waveFrequency = 2; // Frequency
-        const waveAmplitude = 0.05; // Amplitude
+        const waveFrequency = 7; // Frequency
+        const waveAmplitude = 0.015; // Amplitude
 
         const positionAttribute = this.geometry.attributes.position;
         const positions = positionAttribute.array as Float32Array;

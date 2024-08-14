@@ -45,7 +45,7 @@ export default class Gallery extends Object3D {
     
     setImage() {
         this.images?.forEach((img, i) => {
-            const image = new Image(7, 5, img.name);            
+            const image = new Image(2, 1.5, img.name);            
             image.mesh.position.z = i * 3.5;
             this.add(image.mesh);
             this.imageObjects.push(image);
@@ -67,7 +67,7 @@ export default class Gallery extends Object3D {
         this.scroll += (this.scrollTarget - this.scroll) * 0.1;
         // this.scroll *= 1; // adjust speed
         this.scrollTarget *= 0.9;
-        this.currentScroll += this.scroll * 0.8;
+        this.currentScroll += this.scroll * 0.3;
     }
 
     /***** Mobile scroll handle *****/
@@ -110,18 +110,18 @@ export default class Gallery extends Object3D {
     update() {
         this.updateScrollValues();
 
-        if (this.autoScroll) this.scrollTarget += 0.05;
+        if (this.autoScroll) this.scrollTarget += 0.04;
     
         // const waveFrequency = 0.2; // Frequency
-        const waveWidth = 5; // Wave area width
-        const waveAmplitude = 5; // Wave height
-        const totalHeight = this.images?.length * 3.5;
+        const waveWidth = 1.7; // Wave area width
+        const waveAmplitude = 1.4; // Wave height
+        const totalHeight = this.images?.length * 1;
     
         this.imageObjects.forEach((image: Image, i: number) => {
 
             image.update();
 
-            let imagePositionZ = (i * -3.5 + this.currentScroll) % totalHeight;
+            let imagePositionZ = (i * -1 + this.currentScroll) % totalHeight;
     
             // Infinite effect : move image when out of screen to comeback
             if (imagePositionZ < -totalHeight / 2) {
