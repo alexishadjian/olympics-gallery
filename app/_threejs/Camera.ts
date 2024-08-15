@@ -54,8 +54,8 @@
                 this.distance * aspect,
                 this.distance,
                 -this.distance,
-                1,
-                100
+                0.1,
+                1000
             );
     
             this.instance.position.set(12, 14, 22);

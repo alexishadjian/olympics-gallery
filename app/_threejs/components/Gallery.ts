@@ -1,6 +1,8 @@
-import { Mesh, MeshBasicMaterial, Object3D, PlaneGeometry, Raycaster, Vector2 } from "three";
+import { Mesh, MeshBasicMaterial, Object3D, PlaneGeometry, Raycaster, Vector2, Vector3 } from "three";
 import Experience from "../Experience";
 import Image from "./Image";
+import gsap from 'gsap';
+
 
 export default class Gallery extends Object3D {
     
@@ -14,32 +16,37 @@ export default class Gallery extends Object3D {
     imageObjects: any = [];
     touchStartY: number | null = null;
     autoScroll: boolean = true;
-    // raycaster: Raycaster;
-    // mouse: Vector2;
-    // hoveredImages: Set<Image>;
+    raycaster: Raycaster;
+    mouse: Vector2;
+    selectedImage?: Image;
+    debug: any;
+    debugFolder: any;
 
 
     constructor() {
 
         super();
 
-        this.experience = new Experience;
+        this.experience = new Experience();
         this.time = this.experience.time;
         this.loader = this.experience.loader;
+        this.debug = this.experience.debug;
 
         // Get images sources
         this.images = this.loader?.sources;
 
 
-        // this.raycaster = new Raycaster();
-        // this.mouse = new Vector2();
-        // this.hoveredImages = new Set();
+        this.raycaster = new Raycaster();
+        this.mouse = new Vector2();
 
+        this.selectedImage = undefined;
 
         this.setImage();
         this.scrollEvent();
         this.touchEvent();
-        // this.hoverEvent();
+        this.hoverEvent();
+        this.setupClickEvent();
+
 
     }
     
@@ -98,13 +105,102 @@ export default class Gallery extends Object3D {
 
     /***** Hover handle *****/
 
-    // hoverEvent() {
-    //     window.addEventListener('mousemove', this.onMouseMove.bind(this));
-    // }
+    hoverEvent() {
+        window.addEventListener('mousemove', this.onMouseMove.bind(this), {passive: true});
+    }
 
-    // onMouseMove(event: MouseEvent) {
-    //     this.mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-    //     this.mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+    onMouseMove(event: MouseEvent) {
+        this.mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+        this.mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+    }
+
+    /***** Click handle *****/
+
+    setupClickEvent() {
+        window.addEventListener('click', this.onClick.bind(this), { passive: true });
+    }
+
+
+    onClick(event: MouseEvent) {
+
+        // if (this.selectedImage) {
+        //     this.closeFullScreen(this.selectedImage);
+        // } else {
+
+        //     this.raycaster.setFromCamera(this.mouse, this.experience.camera.instance);
+        //     const intersects = this.raycaster.intersectObjects(this.imageObjects.map((img: Image) => img.mesh));
+        
+        //     if (intersects.length > 0) {
+        //         const intersectedMesh = intersects[0].object as Mesh;
+        //         const selectedImage = this.imageObjects.find((img: Image) => img.mesh === intersectedMesh) || null;
+        
+        //         if (selectedImage) {
+        //             this.enterFullScreen(selectedImage);
+        //         }
+        //     }
+        // }
+    }
+
+    enterFullScreen(selectedImage: Image) {
+        // const camera = this.experience.camera.instance;
+        // const aspect = this.experience.width / this.experience.height;
+
+        // // selectedImage.mesh.lookAt(camera.position); // S'assure que l'image fait face à la caméra
+
+    
+        // // Calcule la position cible en utilisant la position de la caméra
+        // const targetPosition = new Vector3(
+        //     camera.position.x,
+        //     camera.position.y,
+        //     camera.position.z - 1 // Ajustez si nécessaire
+        // );
+
+        // gsap.to(selectedImage.mesh.position, {
+        //     x: targetPosition.x,
+        //     y: targetPosition.y,
+        //     z: targetPosition.z,
+        //     duration: 1.5,
+        //     ease: "power2.inOut"
+        // });
+
+        // gsap.to(selectedImage.mesh.scale, {
+        //     x: selectedImage.initialScale.x * 2,
+        //     y: selectedImage.initialScale.y * 2,
+        //     duration: 1.5,
+        //     ease: "power2.inOut"
+        // });
+
+        // gsap.to(selectedImage.material.uniforms.uProgress, {
+        //     value: 1.0,
+        //     duration: 1.5,
+        //     ease: "power2.inOut"
+        // });
+
+        // this.selectedImage = selectedImage;
+    }
+
+
+    // closeFullScreen(selectedImage: Image) {
+    //     gsap.to(selectedImage.mesh.position, {
+    //         z: selectedImage.initialZPosition,
+    //         duration: 1.5,
+    //         ease: "power2.inOut"
+    //     });
+
+    //     gsap.to(selectedImage.mesh.scale, {
+    //         x: selectedImage.initialScale.x,
+    //         y: selectedImage.initialScale.y,
+    //         duration: 1.5,
+    //         ease: "power2.inOut"
+    //     });
+
+    //     gsap.to(selectedImage.material.uniforms.uProgress, {
+    //         value: 0.0,
+    //         duration: 1.5,
+    //         ease: "power2.inOut"
+    //     });
+
+    //     this.selectedImage = undefined;
     // }
 
     update() {
@@ -141,6 +237,5 @@ export default class Gallery extends Object3D {
             image.currentY += (image.targetY - image.currentY) * 0.1;
             image.mesh.position.y = image.currentY;
         });
-    }
-    
+    } 
 }

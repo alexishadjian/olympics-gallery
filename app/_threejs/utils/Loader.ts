@@ -72,7 +72,7 @@ export default class Loader {
     }
 
     sourceLoaded(source: any, file: any) {
-        file.colorSpace = SRGBColorSpace;
+        // file.colorSpace = SRGBColorSpace;
         // file.generateMipmaps = false;
         this.items[source.name] = file;
 
