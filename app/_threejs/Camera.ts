@@ -24,7 +24,7 @@
             this.canvas = this.experience.canvas;
             this.debug = this.experience.debug;
 
-            this.distance = 1.7;
+            this.distance = 2;
 
 
             this.setInstance();

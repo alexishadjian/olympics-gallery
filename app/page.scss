@@ -4,6 +4,7 @@
     background-color: #FFFFFF;
     z-index: 20;
     transition: 0.8s;
+    pointer-events: none;
 
     .content {
         transition: opacity 0.3s;
@@ -36,6 +37,7 @@
 }
 
 .bg-logo-container {
+    pointer-events: none;
     position: fixed;
     inset: 0;
 }

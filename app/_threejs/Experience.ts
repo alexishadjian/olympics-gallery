@@ -46,7 +46,7 @@ export default class Experience {
     onResourcesLoaded() {
         this.scene.buildScene();
         this.camera = new Camera();
-        this.renderer = new Renderer();      
+        this.renderer = new Renderer();
     }
 
     resize() {

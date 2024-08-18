@@ -21,6 +21,8 @@ export default class Gallery extends Object3D {
     selectedImage?: Image;
     debug: any;
     debugFolder: any;
+    fullScreen: boolean = false;
+    scrollable: boolean = true;
 
 
     constructor() {
@@ -52,7 +54,7 @@ export default class Gallery extends Object3D {
     
     setImage() {
         this.images?.forEach((img, i) => {
-            const image = new Image(2, 1.5, img.name);            
+            const image = new Image(2, 1.4, img.name);            
             image.mesh.position.z = i * 3.5;
             this.add(image.mesh);
             this.imageObjects.push(image);
@@ -66,8 +68,11 @@ export default class Gallery extends Object3D {
     }
 
     onScroll(event: WheelEvent) {
-        const delta = event.deltaY * 0.001;
-        this.scrollTarget += delta;
+        if (this.scrollable) {
+            const delta = event.deltaY * 0.001;
+            this.scrollTarget += delta;
+            if (this.fullScreen && this.selectedImage) this.closeFullScreen(this.selectedImage);
+        }
     }
 
     updateScrollValues() {
@@ -122,89 +127,127 @@ export default class Gallery extends Object3D {
 
 
     onClick(event: MouseEvent) {
+        // this.closeFullScreen(this.selectedImage);            
 
-        // if (this.selectedImage) {
+        if (!this.fullScreen) {
+            this.raycaster.setFromCamera(this.mouse, this.experience.camera.instance);
+            const intersects = this.raycaster.intersectObjects(this.imageObjects.map((img: Image) => img.mesh));
+        
+            if (intersects.length > 0) {
+                const intersectedMesh = intersects[0].object as Mesh;
+                const selectedImage = this.imageObjects.find((img: Image) => img.mesh === intersectedMesh) || null;
+        
+                if (selectedImage) {
+                    this.enterFullScreen(selectedImage);
+                }
+            }
+        } 
+        // if (this.fullScreen && this.selectedImage) {
         //     this.closeFullScreen(this.selectedImage);
-        // } else {
-
-        //     this.raycaster.setFromCamera(this.mouse, this.experience.camera.instance);
-        //     const intersects = this.raycaster.intersectObjects(this.imageObjects.map((img: Image) => img.mesh));
-        
-        //     if (intersects.length > 0) {
-        //         const intersectedMesh = intersects[0].object as Mesh;
-        //         const selectedImage = this.imageObjects.find((img: Image) => img.mesh === intersectedMesh) || null;
-        
-        //         if (selectedImage) {
-        //             this.enterFullScreen(selectedImage);
-        //         }
-        //     }
         // }
     }
 
     enterFullScreen(selectedImage: Image) {
-        // const camera = this.experience.camera.instance;
-        // const aspect = this.experience.width / this.experience.height;
+        this.scrollable = false;
 
-        // // selectedImage.mesh.lookAt(camera.position); // S'assure que l'image fait face à la caméra
+        selectedImage.initialPositions = selectedImage.mesh.position.clone();
 
-    
-        // // Calcule la position cible en utilisant la position de la caméra
-        // const targetPosition = new Vector3(
-        //     camera.position.x,
-        //     camera.position.y,
-        //     camera.position.z - 1 // Ajustez si nécessaire
-        // );
+        // Move before and after images out
+        this.moveOutImages(selectedImage);
 
-        // gsap.to(selectedImage.mesh.position, {
-        //     x: targetPosition.x,
-        //     y: targetPosition.y,
-        //     z: targetPosition.z,
-        //     duration: 1.5,
-        //     ease: "power2.inOut"
-        // });
+        // Calculate scale based on available width
+        const availableWidth = (this.experience.camera.instance.right - this.experience.camera.instance.left) * 0.8; // 90% of the camera's width
+        const newScale = availableWidth / selectedImage.mesh.geometry.parameters.width;
 
-        // gsap.to(selectedImage.mesh.scale, {
-        //     x: selectedImage.initialScale.x * 2,
-        //     y: selectedImage.initialScale.y * 2,
-        //     duration: 1.5,
-        //     ease: "power2.inOut"
-        // });
+        // Scale up Image
+        gsap.to(selectedImage.mesh.scale, {
+            x: newScale,
+            y: newScale,
+            duration: 1.5,
+            ease: "power2.inOut"
+        });
 
-        // gsap.to(selectedImage.material.uniforms.uProgress, {
-        //     value: 1.0,
-        //     duration: 1.5,
-        //     ease: "power2.inOut"
-        // });
+        // Center image
+        gsap.to(selectedImage.mesh.position, {
+            x: 0,
+            y: 0,
+            z: 0,
+            duration: 1.5,
+            ease: "power2.inOut"
+        });
 
-        // this.selectedImage = selectedImage;
+        // Rotate image
+        gsap.to(selectedImage.mesh.rotation, {
+            y: 0.5,
+            duration: 1.5,
+            ease: "power2.inOut"
+        });
+        
+        this.selectedImage = selectedImage;
+        this.fullScreen = true;
+
+        setTimeout(() => {
+            this.scrollable = true;
+        }, 1500);
     }
 
 
-    // closeFullScreen(selectedImage: Image) {
-    //     gsap.to(selectedImage.mesh.position, {
-    //         z: selectedImage.initialZPosition,
-    //         duration: 1.5,
-    //         ease: "power2.inOut"
-    //     });
+    closeFullScreen(selectedImage: Image) {
 
-    //     gsap.to(selectedImage.mesh.scale, {
-    //         x: selectedImage.initialScale.x,
-    //         y: selectedImage.initialScale.y,
-    //         duration: 1.5,
-    //         ease: "power2.inOut"
-    //     });
+        gsap.to(selectedImage.mesh.scale, {
+            x: 1,
+            y: 1,
+            duration: 1.5,
+            ease: "power2.inOut"
+        });
 
-    //     gsap.to(selectedImage.material.uniforms.uProgress, {
-    //         value: 0.0,
-    //         duration: 1.5,
-    //         ease: "power2.inOut"
-    //     });
+        // Center image
+        gsap.to(selectedImage.mesh.position, {
+            x: 0,
+            y: selectedImage.initialPositions.y,
+            z: selectedImage.initialPositions.z,
+            duration: 1.5,
+            ease: "power2.inOut"
+        });
 
-    //     this.selectedImage = undefined;
-    // }
+        gsap.to(selectedImage.mesh.rotation, {
+            y: 0,
+            duration: 1.5,
+            ease: "power2.inOut"
+        });
+
+        // Bring before and after images back
+        this.moveOutImages(selectedImage);
+
+        this.selectedImage = undefined;
+        setTimeout(() => {
+            this.fullScreen = false;
+        }, 1500);
+    }
+
+    moveOutImages(selectedImage: Image) {
+        // Calculate the distance sufficient to get the images out of the screen
+        const offsetDistance = (this.experience.camera.instance.right - this.experience.camera.instance.left) * 2;
+    
+        this.imageObjects.forEach((image: Image) => {
+            const isBeforeSelected = image.mesh.position.z < selectedImage.mesh.position.z;
+
+            const direction = isBeforeSelected ? -1 : 1;
+            const moveDistance = this.fullScreen ? -direction * offsetDistance : direction * offsetDistance;
+
+            if (image.mesh.position.z !== selectedImage.mesh.position.z) {
+                gsap.to(image.mesh.position, {
+                    z: image.mesh.position.z + moveDistance,
+                    duration: 1.5,
+                    ease: "power2.inOut"
+                });
+            }
+        });
+    }
+    
 
     update() {
-        this.updateScrollValues();
+        if (!this.fullScreen) this.updateScrollValues();
 
         if (this.autoScroll) this.scrollTarget += 0.04;
     
@@ -226,7 +269,7 @@ export default class Gallery extends Object3D {
                 imagePositionZ -= totalHeight;
             }
     
-            image.mesh.position.z = imagePositionZ;
+            if (!this.fullScreen) image.mesh.position.z = imagePositionZ;
     
             // Apply wave effect only on image near center 
             image.targetY = waveAmplitude * Math.exp(-Math.pow(imagePositionZ / waveWidth, 2));
@@ -235,7 +278,7 @@ export default class Gallery extends Object3D {
 
             // Smooth transition
             image.currentY += (image.targetY - image.currentY) * 0.1;
-            image.mesh.position.y = image.currentY;
+            if (!this.fullScreen) image.mesh.position.y = image.currentY;
         });
     } 
 }
