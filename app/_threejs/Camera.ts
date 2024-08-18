@@ -1,7 +1,6 @@
-    import { Mesh, MeshBasicMaterial, OrthographicCamera, PerspectiveCamera, Scene, SphereGeometry, Vector3 } from "three";
+    import { Mesh, MeshBasicMaterial, OrthographicCamera, Scene, SphereGeometry } from "three";
     import { OrbitControls } from "three/examples/jsm/Addons.js";
-
-    import Experience from "./Experience";
+    import Experience from "@/threejs/Experience";
 
 
     export default class Camera {

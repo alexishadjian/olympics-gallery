@@ -1,6 +1,6 @@
-import { Mesh, MeshBasicMaterial, Object3D, PlaneGeometry, Raycaster, Vector2, Vector3 } from "three";
-import Experience from "../Experience";
-import Image from "./Image";
+import { Mesh, Object3D, PlaneGeometry, Raycaster, Vector2 } from "three";
+import Experience from "@/threejs/Experience";
+import Image from "@/threejs/components/Image";
 import gsap from 'gsap';
 
 
@@ -9,6 +9,8 @@ export default class Gallery extends Object3D {
     experience: Experience;
     time: any;
     loader: any;
+    debug: any;
+    debugFolder: any;
     images: { name: string }[] = [];
     scroll: number = 0;
     scrollTarget: number = 0;
@@ -16,11 +18,9 @@ export default class Gallery extends Object3D {
     imageObjects: any = [];
     touchStartY: number | null = null;
     autoScroll: boolean = true;
-    raycaster: Raycaster;
-    mouse: Vector2;
-    selectedImage?: Image;
-    debug: any;
-    debugFolder: any;
+    raycaster: Raycaster = new Raycaster();
+    mouse: Vector2 = new Vector2();
+    selectedImage?: Image = undefined;
     fullScreen: boolean = false;
     scrollable: boolean = true;
 
@@ -37,18 +37,12 @@ export default class Gallery extends Object3D {
         // Get images sources
         this.images = this.loader?.sources;
 
-
-        this.raycaster = new Raycaster();
-        this.mouse = new Vector2();
-
-        this.selectedImage = undefined;
-
+        // Setup
         this.setImage();
         this.scrollEvent();
         this.touchEvent();
         this.hoverEvent();
         this.setupClickEvent();
-
 
     }
     
@@ -127,7 +121,6 @@ export default class Gallery extends Object3D {
 
 
     onClick(event: MouseEvent) {
-        // this.closeFullScreen(this.selectedImage);            
 
         if (!this.fullScreen) {
             this.raycaster.setFromCamera(this.mouse, this.experience.camera.instance);
@@ -142,9 +135,6 @@ export default class Gallery extends Object3D {
                 }
             }
         } 
-        // if (this.fullScreen && this.selectedImage) {
-        //     this.closeFullScreen(this.selectedImage);
-        // }
     }
 
     enterFullScreen(selectedImage: Image) {
@@ -157,7 +147,8 @@ export default class Gallery extends Object3D {
 
         // Calculate scale based on available width
         const availableWidth = (this.experience.camera.instance.right - this.experience.camera.instance.left) * 0.8; // 90% of the camera's width
-        const newScale = availableWidth / selectedImage.mesh.geometry.parameters.width;
+        const planeGeometry = selectedImage.mesh.geometry as PlaneGeometry;
+        const newScale = availableWidth / planeGeometry.parameters.width;
 
         // Scale up Image
         gsap.to(selectedImage.mesh.scale, {
@@ -176,7 +167,7 @@ export default class Gallery extends Object3D {
             ease: "power2.inOut"
         });
 
-        // Rotate image
+        // Rotate image to face camera
         gsap.to(selectedImage.mesh.rotation, {
             y: 0.5,
             duration: 1.5,
@@ -193,7 +184,7 @@ export default class Gallery extends Object3D {
 
 
     closeFullScreen(selectedImage: Image) {
-
+        // Scale image to original size
         gsap.to(selectedImage.mesh.scale, {
             x: 1,
             y: 1,
@@ -201,7 +192,7 @@ export default class Gallery extends Object3D {
             ease: "power2.inOut"
         });
 
-        // Center image
+        // Move image to original position
         gsap.to(selectedImage.mesh.position, {
             x: 0,
             y: selectedImage.initialPositions.y,
@@ -210,6 +201,7 @@ export default class Gallery extends Object3D {
             ease: "power2.inOut"
         });
 
+        // Rotate image to original rotation
         gsap.to(selectedImage.mesh.rotation, {
             y: 0,
             duration: 1.5,

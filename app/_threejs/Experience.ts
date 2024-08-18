@@ -1,10 +1,10 @@
 import { Mesh } from 'three';
-import Time from './utils/Time';
-import Camera from './Camera';
-import Renderer from './Renderer';
-import Loader from './utils/Loader';
-import Debug from './utils/Debug';
-import MainScene from './MainScene';
+import Time from '@/threejs/utils/Time';
+import Camera from '@/threejs/Camera';
+import Renderer from '@/threejs/Renderer';
+import Loader from '@/threejs/utils/Loader';
+import Debug from '@/threejs/utils/Debug';
+import MainScene from '@/threejs/MainScene';
 
 let instance: Experience | null = null;
 

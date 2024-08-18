@@ -1,14 +1,11 @@
 import { AxesHelper, Scene } from 'three';
-
-import Lights from "./components/Lights";
-import Image from './components/Image';
-import Gallery from './components/Gallery';
-import Experience from './Experience';
+import Image from '@/threejs/components/Image';
+import Gallery from '@/threejs/components/Gallery';
+import Experience from '@/threejs/Experience';
 
 
 export default class MainScene extends Scene {
 
-    lights!: Lights;
     axesHelper!: AxesHelper;
     image!: Image;
     gallery!: Gallery;
@@ -22,8 +19,6 @@ export default class MainScene extends Scene {
         this.experience = new Experience();
         this.debug = this.experience.debug;
 
-
-        // this.setLights(); 
         
         if (this.debug?.active) {
             // Debug group
@@ -49,11 +44,6 @@ export default class MainScene extends Scene {
         this.gallery = new Gallery();
         // this.gallery.position.z = -20;
         this.add(this.gallery);
-    }
-
-    setLights() {
-        this.lights = new Lights();
-        this.add(this.lights.ambientLight);
     }
 
     update() {
