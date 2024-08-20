@@ -1,5 +1,5 @@
 import { Scene, WebGLRenderer } from "three";
-import Experience from "./Experience";
+import Experience from "@/threejs/Experience";
 
 export default class Renderer {
 

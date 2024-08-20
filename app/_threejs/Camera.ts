@@ -1,7 +1,6 @@
-    import { Mesh, MeshBasicMaterial, OrthographicCamera, PerspectiveCamera, Scene, SphereGeometry, Vector3 } from "three";
+    import { Mesh, MeshBasicMaterial, OrthographicCamera, Scene, SphereGeometry } from "three";
     import { OrbitControls } from "three/examples/jsm/Addons.js";
-
-    import Experience from "./Experience";
+    import Experience from "@/threejs/Experience";
 
 
     export default class Camera {
@@ -24,7 +23,7 @@
             this.canvas = this.experience.canvas;
             this.debug = this.experience.debug;
 
-            this.distance = 6;
+            this.distance = 2;
 
 
             this.setInstance();
@@ -35,9 +34,9 @@
                 // Debug group
                 this.debugFolder = this.debug.ui.addFolder('Camera');
 
-                this.debugFolder.add(this.instance.position, 'x').min(-100).max(100).step(2).name('Camera x');
-                this.debugFolder.add(this.instance.position, 'y').min(-100).max(100).step(2).name('Camera y');
-                this.debugFolder.add(this.instance.position, 'z').min(-100).max(100).step(2).name('Camera z');
+                this.debugFolder.add(this.instance.position, 'x').min(-100).max(100).step(1).name('Camera x');
+                this.debugFolder.add(this.instance.position, 'y').min(-100).max(100).step(1).name('Camera y');
+                this.debugFolder.add(this.instance.position, 'z').min(-100).max(100).step(1).name('Camera z');
 
                 // Debug property
                 this.debugFolder.add(this.cameraTarget.position, 'x').min(-100).max(100).step(2).name('Target x');
@@ -54,8 +53,8 @@
                 this.distance * aspect,
                 this.distance,
                 -this.distance,
-                1,
-                100
+                0.1,
+                1000
             );
     
             this.instance.position.set(12, 14, 22);

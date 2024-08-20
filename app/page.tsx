@@ -13,7 +13,7 @@ export default function Home() {
 
     useEffect(() => {
         if (canvasRef.current) {
-            new Experience(canvasRef.current)
+            new Experience(canvasRef.current);
         }
     })
 

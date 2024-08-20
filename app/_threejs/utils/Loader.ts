@@ -1,12 +1,12 @@
-import { LoadingManager, SRGBColorSpace, TextureLoader, Scene, PlaneGeometry, ShaderMaterial, Mesh } from "three";
-import Experience from "../Experience";
-import images from "../source";
+import { LoadingManager, SRGBColorSpace, TextureLoader, Scene } from "three";
+import Experience from "@/threejs/Experience";
+import images from "@/threejs/source";
 
 export default class Loader {
     
-    sources: any;
+    sources: any[];
     textureLoader!: TextureLoader;
-    items: any;
+    items: any[];
     toLoad: number;
     loaded: number;
     experience: Experience;
@@ -22,7 +22,7 @@ export default class Loader {
 
         this.sources = images;
         
-        this.items = {};
+        this.items = [];
         this.toLoad = this.sources.length;
         this.loaded = 0;
 
@@ -72,7 +72,7 @@ export default class Loader {
     }
 
     sourceLoaded(source: any, file: any) {
-        file.colorSpace = SRGBColorSpace;
+        // file.colorSpace = SRGBColorSpace;
         // file.generateMipmaps = false;
         this.items[source.name] = file;
 

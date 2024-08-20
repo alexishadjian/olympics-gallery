@@ -1,11 +1,13 @@
-import { Mesh, MeshBasicMaterial, BufferGeometry, PlaneGeometry } from "three";
-import Experience from "../Experience";
+import { BufferGeometry, Mesh, PlaneGeometry, ShaderMaterial, Vector2, Vector3 } from "three";
+import Experience from "@/threejs/Experience";
+import fragment from "@/threejs/shaders/fragment.glsl";
+import vertex from "@/threejs/shaders/vertex.glsl";
 
 export default class Image {
 
     experience: Experience;
-    geometry!: BufferGeometry;
-    material!: MeshBasicMaterial;
+    geometry!: PlaneGeometry;
+    material!: ShaderMaterial;
     mesh!: Mesh;
     width: number;
     height: number;
@@ -14,7 +16,7 @@ export default class Image {
     loader: any;
     targetY: number = 0;
     currentY: number = 0;
-    initialPositions!: Float32Array;
+    initialPositions!: Vector3;
 
 
     constructor(width: number, height: number, texture: string) {
@@ -30,23 +32,22 @@ export default class Image {
         this.setGeometry();
         this.setMaterial();
         this.setMesh();
+
     }
 
     setGeometry() {
-        const planeGeometry = new PlaneGeometry(this.width, this.height, 64, 64);
-        this.geometry = planeGeometry as BufferGeometry;
-
-        // Initial position
-        const positionAttribute = this.geometry.attributes.position;
-        const positions = positionAttribute.array as Float32Array;
-        this.initialPositions = new Float32Array(positions.length);
-        this.initialPositions.set(positions);
-
+        this.geometry = new PlaneGeometry(this.width, this.height, 32, 32);
     }
 
     setMaterial() {
-        this.material = new MeshBasicMaterial({
-            map: this.loader.items[this.texture],
+        this.material = new ShaderMaterial({
+            vertexShader: vertex,
+            fragmentShader: fragment,
+            uniforms: {
+                uFrequency: { value: new Vector2(5, 5) },
+                uTime: { value: 0 },
+                uTexture: { value: this.loader.items[this.texture] },
+            }
         });
     }
 
@@ -56,21 +57,6 @@ export default class Image {
     }
 
     update() {
-        this.applyWaveEffect();
-    }
-
-    applyWaveEffect() {
-        const waveFrequency = 2; // Frequency
-        const waveAmplitude = 0.05; // Amplitude
-
-        const positionAttribute = this.geometry.attributes.position;
-        const positions = positionAttribute.array as Float32Array;
-
-        for (let i = 0; i < positions.length; i += 3) {
-            const y = this.initialPositions[i + 1]; // Initial Y position
-            positions[i + 2] = waveAmplitude * Math.sin(y * waveFrequency + this.time.elapsedTime); // Edit Z position
-        }
-
-        positionAttribute.needsUpdate = true;
+        this.material.uniforms.uTime.value = this.time.elapsedTime;
     }
 }
