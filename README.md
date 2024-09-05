@@ -1,6 +1,6 @@
 # Olympics-gallery
 
-## Launch the project
+## Launch project
 ```
 docker-compose up
 ```
