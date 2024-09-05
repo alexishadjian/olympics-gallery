@@ -13,7 +13,7 @@
         cameraTarget!: Mesh;
         debug: any;
         debugFolder: any;
-        distance: number;
+        distance!: number;
 
         
         constructor() {
@@ -23,7 +23,7 @@
             this.canvas = this.experience.canvas;
             this.debug = this.experience.debug;
 
-            this.distance = 2;
+            this.setCameraDistance();
 
 
             this.setInstance();
@@ -78,7 +78,22 @@
             this.controls.enableDamping = true;
         }
 
+        setCameraDistance() {
+            const minWidth = 300;  // Minimum screen width for maximum distance (4)
+            const maxWidth = 800;  // Maximum screen width for minimum distance (2)
+            const maxDistance = 4; // Maximum distance (when the screen width is small)
+            const minDistance = 2; // Minimum distance (when the screen width is large)
+            
+            // Calculate the distance based on the screen width, clamped between 2 and 4
+            const clampedScreenWidth = Math.max(minWidth, Math.min(maxWidth, innerWidth));
+            const normalizedWidth = (clampedScreenWidth - minWidth) / (maxWidth - minWidth);
+            
+            this.distance = maxDistance - normalizedWidth * (maxDistance - minDistance);
+        }
+
         resize() {
+            this.setCameraDistance();
+            
             const aspect = this.experience.width / this.experience.height;
             this.instance.left = -this.distance * aspect;
             this.instance.right = this.distance * aspect;   
