@@ -96,7 +96,7 @@ export default class Gallery extends Object3D {
     onTouchMove(event: TouchEvent) {
         if (this.touchStartY !== null) {
             const touchY = event.touches[0].clientY;
-            const delta = (this.touchStartY - touchY) * 0.01;
+            const delta = (touchY - this.touchStartY) * 0.01;
             this.scrollTarget += delta;
             this.touchStartY = touchY;
         }
