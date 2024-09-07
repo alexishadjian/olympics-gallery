@@ -24,6 +24,8 @@ body {
     min-height: 100vh;
     overflow: hidden;
     background-color: white;
+    position: fixed;
+    inset: 0;
 }
 
 main {
