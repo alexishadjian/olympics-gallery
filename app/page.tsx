@@ -14,9 +14,7 @@ export default function Home() {
 
     useEffect(() => {
         if (canvasRef.current) {
-            experience = new Experience(canvasRef.current);
-            console.log(experience);
-            
+            experience = new Experience(canvasRef.current)            
         }
     })
 
@@ -33,6 +31,7 @@ export default function Home() {
                     src={OlympicsBgLogo}
                     alt="Olympcis background logo"
                     style={{ width: '100%', height: 'auto', padding: '8%' }}
+                    draggable={false}
                 />
             </div>
 
