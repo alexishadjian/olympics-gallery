@@ -47,3 +47,20 @@
     outline: none;
     inset: 0;
 }
+
+.close-btn-container {
+    position: fixed;
+    right: 0;
+    top: 0;
+    left: 0;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 30px 0;
+    
+    .close-btn {
+        position: relative;
+        z-index: 10;
+        transition: 0.5s;
+    }
+}

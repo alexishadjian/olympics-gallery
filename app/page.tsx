@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import Experience from "@/threejs/Experience";
-import { OlympicsLogoAnimated, OlympicsBgLogo } from '@/images';
+import { OlympicsLogoAnimated, OlympicsBgLogo, Cross } from '@/images';
 import Image from "next/image";
 import './page.scss';
 
@@ -10,10 +10,13 @@ import './page.scss';
 export default function Home() {
 
     const canvasRef = useRef<HTMLCanvasElement>(null);
+    let experience: Experience;
 
     useEffect(() => {
         if (canvasRef.current) {
-            new Experience(canvasRef.current);
+            experience = new Experience(canvasRef.current);
+            console.log(experience);
+            
         }
     })
 
@@ -46,6 +49,12 @@ export default function Home() {
                         <div className="indicator"></div>
                     </div>
                 </div>
+            </div>
+
+            <div className="close-btn-container wrapper">
+                <button className="close-btn is-hidden" onClick={() => { experience.scene.gallery.closeFullScreen() }}>
+                    <Image src={Cross} width={30} alt="Cross"/> 
+                </button>
             </div>
 
         </div>
