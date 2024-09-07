@@ -4,7 +4,7 @@ import './header.scss';
 
 export default function Header() {
     return (
-        <header>
+        <header className="wrapper">
             <Image src={OlympicsLogoAnimated} width={80} alt="Olympcis logo"/>
         </header>
     )

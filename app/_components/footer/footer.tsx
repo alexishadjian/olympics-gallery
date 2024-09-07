@@ -3,7 +3,7 @@ import Link from "next/link";
 
 export default function Footer() {
     return (
-        <footer className="gap-s">
+        <footer className="gap-s wrapper">
             <p className="text">26 juillet 2024</p>
             <p className="text">__ 11 août 2024</p>
             <Link href="https://www.instagram.com/paris2024" className="flex center link" target="_blank">

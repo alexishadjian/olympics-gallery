@@ -23,6 +23,7 @@ export default class Gallery extends Object3D {
     selectedImage?: Image = undefined;
     fullScreen: boolean = false;
     scrollable: boolean = true;
+    closeBtn: HTMLElement;
 
 
     constructor() {
@@ -36,6 +37,9 @@ export default class Gallery extends Object3D {
 
         // Get images sources
         this.images = this.loader?.sources;
+
+        this.closeBtn = document.querySelector('.home .close-btn') as HTMLElement;
+
 
         // Setup
         this.setImage();
@@ -65,7 +69,7 @@ export default class Gallery extends Object3D {
         if (this.scrollable) {
             const delta = event.deltaY * 0.001;
             this.scrollTarget += delta;
-            if (this.fullScreen && this.selectedImage) this.closeFullScreen(this.selectedImage);
+            if (this.fullScreen && this.selectedImage) this.closeFullScreen();
         }
     }
 
@@ -145,8 +149,10 @@ export default class Gallery extends Object3D {
         // Move before and after images out
         this.moveOutImages(selectedImage);
 
+        const maxWidth = innerWidth < 900 ? 0.9 : 0.75;; // 90% of the camera's width
+
         // Calculate scale based on available width
-        const availableWidth = (this.experience.camera.instance.right - this.experience.camera.instance.left) * 0.8; // 90% of the camera's width
+        const availableWidth = (this.experience.camera.instance.right - this.experience.camera.instance.left) * maxWidth;
         const planeGeometry = selectedImage.mesh.geometry as PlaneGeometry;
         const newScale = availableWidth / planeGeometry.parameters.width;
 
@@ -177,39 +183,49 @@ export default class Gallery extends Object3D {
         this.selectedImage = selectedImage;
         this.fullScreen = true;
 
+        // Show close button
+        this.closeBtn.classList.remove('is-hidden');
+
+
         setTimeout(() => {
             this.scrollable = true;
         }, 1500);
     }
 
 
-    closeFullScreen(selectedImage: Image) {
+    closeFullScreen() {
         // Scale image to original size
-        gsap.to(selectedImage.mesh.scale, {
-            x: 1,
-            y: 1,
-            duration: 1.5,
-            ease: "power2.inOut"
-        });
+        if (this.selectedImage) {
+            gsap.to(this.selectedImage.mesh.scale, {
+                x: 1,
+                y: 1,
+                duration: 1.5,
+                ease: "power2.inOut"
+            });
+    
+            // Move image to original position
+            gsap.to(this.selectedImage.mesh.position, {
+                x: 0,
+                y: this.selectedImage.initialPositions.y,
+                z: this.selectedImage.initialPositions.z,
+                duration: 1.5,
+                ease: "power2.inOut"
+            });
+    
+            // Rotate image to original rotation
+            gsap.to(this.selectedImage.mesh.rotation, {
+                y: 0,
+                duration: 1.5,
+                ease: "power2.inOut"
+            });
+    
+            // Bring before and after images back
+            this.moveOutImages(this.selectedImage);
+        }
 
-        // Move image to original position
-        gsap.to(selectedImage.mesh.position, {
-            x: 0,
-            y: selectedImage.initialPositions.y,
-            z: selectedImage.initialPositions.z,
-            duration: 1.5,
-            ease: "power2.inOut"
-        });
+        // Hide close button
+        this.closeBtn.classList.add('is-hidden');
 
-        // Rotate image to original rotation
-        gsap.to(selectedImage.mesh.rotation, {
-            y: 0,
-            duration: 1.5,
-            ease: "power2.inOut"
-        });
-
-        // Bring before and after images back
-        this.moveOutImages(selectedImage);
 
         this.selectedImage = undefined;
         setTimeout(() => {
