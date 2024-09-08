@@ -74,7 +74,7 @@ export default class Gallery extends Object3D {
     }
 
     updateScrollValues() {
-        this.scroll += (this.scrollTarget - this.scroll) * 0.1;
+        this.scroll += (this.scrollTarget - this.scroll) * 0.05;
         // this.scroll *= 1; // adjust speed
         this.scrollTarget *= 0.9;
         this.currentScroll += this.scroll * 0.3;
@@ -115,6 +115,19 @@ export default class Gallery extends Object3D {
     onMouseMove(event: MouseEvent) {
         this.mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
         this.mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+
+        // Détecter les intersections avec les images
+        this.raycaster.setFromCamera(this.mouse, this.experience.camera.instance);
+        const intersects = this.raycaster.intersectObjects(this.imageObjects.map((img: Image) => img.mesh));
+
+        if (!this.selectedImage && intersects.length > 0) {
+            // Changer le curseur en pointeur si l'image est survolée
+            document.body.style.cursor = 'pointer';
+        } else {
+            // Réinitialiser le curseur à l'état par défaut
+            document.body.style.cursor = 'default';
+        }
+
     }
 
     /***** Click handle *****/
@@ -126,10 +139,10 @@ export default class Gallery extends Object3D {
 
     onClick(event: MouseEvent) {
 
-        if (!this.fullScreen) {
-            this.raycaster.setFromCamera(this.mouse, this.experience.camera.instance);
-            const intersects = this.raycaster.intersectObjects(this.imageObjects.map((img: Image) => img.mesh));
+        this.raycaster.setFromCamera(this.mouse, this.experience.camera.instance);
+        const intersects = this.raycaster.intersectObjects(this.imageObjects.map((img: Image) => img.mesh));
         
+        if (!this.fullScreen) {
             if (intersects.length > 0) {
                 const intersectedMesh = intersects[0].object as Mesh;
                 const selectedImage = this.imageObjects.find((img: Image) => img.mesh === intersectedMesh) || null;
@@ -138,7 +151,11 @@ export default class Gallery extends Object3D {
                     this.enterFullScreen(selectedImage);
                 }
             }
-        } 
+        } else {
+            if (intersects.length <= 0) {
+                this.closeFullScreen();
+            }
+        }
     }
 
     enterFullScreen(selectedImage: Image) {
